@@ -1,1 +1,1 @@
-# exercicios e testes cpp
+# **Teste de lógica e programação**, com _C++_ e _C_
