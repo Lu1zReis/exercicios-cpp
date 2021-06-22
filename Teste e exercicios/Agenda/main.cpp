@@ -19,8 +19,8 @@ void lista(){
 
     for(int i = 0; i<SIZE; i++){
 
-    //declaramos a condição if para ele nao ficar rodando todo o vetor de SIZE que tem 200 de memoria
-    //já o * serve como ponteiro para puxar os dados da var global 'nome'
+    //declaramos a condiï¿½ï¿½o if para ele nao ficar rodando todo o vetor de SIZE que tem 200 de memoria
+    //jï¿½ o * serve como ponteiro para puxar os dados da var global 'nome'
     // ja o '*nome[i]>0' servira para identificar se na memoria da var nome ha algo e a var i vai executar e procurar algum valor dentro dessa memoria
             if(*nome[i]>0){
                 printf("\nNome: %s\nE-mail: %s\nTelefone: %d\n\n", nome[i], email[i], telefone[i]);
@@ -28,8 +28,8 @@ void lista(){
         }
         else{
 
-    /*o break serve para que se no if por exemplo, tem um valor na linha 0, 1, mas na 2, ja não tem nada
-    ele vai checar isso e entrar no else e vai sair do laço de repeticao.
+    /*o break serve para que se no if por exemplo, tem um valor na linha 0, 1, mas na 2, ja nï¿½o tem nada
+    ele vai checar isso e entrar no else e vai sair do laï¿½o de repeticao.
     */
             break;
         }
@@ -75,12 +75,12 @@ char NomePesquisa[50];
                 if(strcmp(nome[k], NomePesquisa)==0){
                     printf("\nNome: %s\nE-mail: %s\nNumero: %d", nome[k], email[k], telefone[k]);
                 }else if(k>=SIZE){
-                    cout << "Não há esse nome na lista" << endl;
+                    cout << "Nao ha esse nome na lista" << endl;
                 }
             }
             break;
         default:
-            printf("\nOpção Inválida\n");
+            printf("\nOpï¿½ï¿½o Invï¿½lida\n");
         }
     printf("\nDigite 1 para continuar pesquisando: ");
     scanf("%d", &op);
@@ -102,7 +102,7 @@ vao ficar no valor inicial ou na linha 0, e assim por diante enquanto formos cad
 
 /*aqui nas var 'nome', 'email' e 'telefone', como ja dito antes, o & vai alocar o valor na memoria
  isso quer dizer que, vai ser basicamente um ponteiro, para colocar o valor nessas var globais, e
- chamarmos quando precisarmos na função 'pesquisa'.
+ chamarmos quando precisarmos na funï¿½ï¿½o 'pesquisa'.
  */
        scanf("%s", &nome[linha]);
        printf("Digite o E-mail: ");
