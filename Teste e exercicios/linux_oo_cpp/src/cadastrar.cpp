@@ -1,4 +1,4 @@
-#include "cadastrar.h"
+#include "../include/cadastrar.h"
 #include <string.h>
 bool cadastro::set_Nome(char Nome[])
 {

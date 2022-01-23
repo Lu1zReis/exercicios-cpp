@@ -1,5 +1,6 @@
 #include <iostream>
-#include "cadastrar.h"
+#include "include/cadastrar.h"
+
 using namespace std;
 
 /* CLASSE DO CADASTRO */
