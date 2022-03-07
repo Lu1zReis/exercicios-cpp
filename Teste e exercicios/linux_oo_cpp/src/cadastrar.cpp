@@ -1,4 +1,4 @@
-#include "cadastrar.h"
+#include "../include/cadastrar.h"
 #include <string.h>
 // Parte dasa funções de inserir e pegar o NOME
 bool cadastro::set_Nome(char Nome[]) {
