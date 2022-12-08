@@ -2,7 +2,7 @@
 
 using namespace std;
 
-dados(int *venc, int *vitInt, int *vitGre, int *empates) {
+void dados(int *venc, int *vitInt, int *vitGre, int *empates) {
 
     if(venc == 1) {
         *vitInt += 1;
