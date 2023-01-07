@@ -1,6 +1,8 @@
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
-int const n = 5;
+int const n = 1000;
 
 using namespace std;
 
@@ -50,10 +52,11 @@ void selectionSort(int *vetor) {
 
 int main()
 {
-    int vetor[n];
+    int vetor[n] = {};
 
     for(int i = 0; i < n; i++) {
-        cin >> vetor[i];
+        //vetor[i] = rand() % 101;
+        vetor[i] = i;
     }
 
     for(int i = 0; i < n; i++) {
@@ -64,8 +67,8 @@ int main()
 
     //cout << "SELECTION SORT" << endl;
     //selectionSort(vetor);
-    //cout << "INSERTION SORT" << endl;
-    //insertionSort(vetor);
+    cout << "INSERTION SORT" << endl;
+    insertionSort(vetor);
 
     return 0;
 }
