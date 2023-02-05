@@ -5,17 +5,40 @@ fstream arquivo;
 
 struct conta {
     string nome;
-    int dia, mes;
-    float valor;
+    string dia, mes;
+    string valor;
 };
+
+string getNome(string *l) {
+    string nome, linha = *l;
+    for(int i = 0; i < linha.size(); i++) {
+        if(linha[i] == ';')
+            break;
+        nome += linha[i];
+    }
+    return nome;
+}
+
+string getValor(string *l) {
+    string linha = *l;
+    string valor;
+    int cont = 0;
+    for(int i = 0; i < linha.size(); i++) {
+        if(linha[i] == ';')
+            cont++;
+        if(cont == 2) {
+            if(linha[i] != ';')
+                valor += linha[i];
+        }
+    }
+    return valor;
+}
 
 void addConta() {
     // VARIAVEIS E OBJETOS DA FUNCAO
     conta adicionar;
-    arquivo.open("bancoDados.txt", ios::out);
+    arquivo.open("bancoDados.txt", ios::out|ios::app);
     char opc = 's';
-
-    cout << "Digite CTRL+Z para sair\n";
 
     while(opc == 'S' or opc == 's') {
         cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
@@ -34,26 +57,27 @@ void addConta() {
 }
 
 void listContas() {
-     // VARIAVEIS E OBJETOS DA FUNCAO
-    string linha;
-    conta lista;
-    arquivo.open("bancoDados.txt", ios::in);
+    // VARIAVEIS E OBJETOS DA FUNCAO
 
-    if(arquivo.is_open()) {
-         cout << "   NOME         VALOR    DATA\n";
-         while(getline(arquivo, linha)) {
+    string linha;
+    conta lista;
+    arquivo.open("bancoDados.txt", ios::in);
+
+    if(arquivo.is_open()) {
+        cout << "   NOME         VALOR    DATA\n";
+        while(getline(arquivo, linha)) {
              // PEGANDO OS RESPECTIVOS VALORES DAS LINHAS
-             lista.nome = getNome(&linha);
+            lista.nome = getNome(&linha);
              lista.valor = getValor(&linha);
 
-             cout << " " << lista.nome << endl;
-         }
-         arquivo.close();
-     } else {
+             cout << "  " << lista.nome << "        " << lista.valor << endl;
+        }
+        arquivo.close();
+    } else {
          cout << "Nao foi possivel abrir o arquivo\n";
      }
-     
- }
+
+}
 
 int menu() {
 
