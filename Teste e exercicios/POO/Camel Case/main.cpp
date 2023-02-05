@@ -1,17 +1,19 @@
 #include <iostream>
 #include <cctype>
+#include <vector>
+#include <iterator>
 
 using namespace std;
 
 // COMBINANDO OU DIVIDINDO
 string s_cOperacao(char *operacao, string *valor) {
     string novoValor = *valor;
-    string caractere;
+    string caractere = "";
 
     // DIVIDIR
     if(*operacao == 'S') {
         for(int i = 0; i < novoValor.size(); i++) {
-            // VERIFICANDO SE HÁ UM VALOR COM CHAR MAIUSCULO, SE SIM, DAMOS UM ESPACO ANTES OU SE É A PRIMEIRA POS
+            // VERIFICANDO SE HA UM VALOR COM CHAR MAIUSCULO, SE SIM, DAMOS UM ESPACO ANTES OU SE E A PRIMEIRA POS
             if(i != 0) {
                 if(isupper(novoValor[i])) {
                     caractere += " ";
@@ -24,7 +26,7 @@ string s_cOperacao(char *operacao, string *valor) {
     // COMBINAR
     else {
         for(int j = 0; j < novoValor.size(); j++) {
-            // VERIFICANDO SE HÁ UM VALOR COM ESPACO, SE SIM, TIRAMOS O ESPACO
+            // VERIFICANDO SE HA UM VALOR COM ESPACO, SE SIM, TIRAMOS O ESPACO
             if(!isspace(novoValor[j])) {
                 caractere += novoValor[j];
             }
@@ -39,7 +41,6 @@ string s_cOperacao(char *operacao, string *valor) {
 string tipoDado(char *dado, char *operacao, string *valor) {
     char op = *operacao;
     string val = *valor;
-
     if(*operacao == 'S') {
 
         // dividindo primeiro antes de deixar formatado
@@ -82,21 +83,31 @@ string tipoDado(char *dado, char *operacao, string *valor) {
 
 int main()
 {
+
     // valor do usuario / Operacao / Tipo de dado
     string valor;
     string resu;
-    cin >> valor;
-    // Separar / Combinar
-    char operacao = valor[0];
 
-    // Metodo / Classe / Variavel
-    char dado = valor[2];
+    vector<string> resultado;
+    vector<string>::iterator it = resultado.begin();
 
-    for(int j = 4; j < valor.size(); j++)
-        resu += valor[j];
+    while(getline(cin, valor) && valor != "") {
+        resu = "";
+        // Separar / Combinar
+        char operacao = valor[0];
 
-     string resultado = tipoDado(&dado, &operacao, &resu);
-     cout << resultado;
+        // Metodo / Classe / Variavel
+        char dado = valor[2];
+        for(int j = 4; j < valor.size(); j++)
+            resu += valor[j];
+
+        resultado.push_back(tipoDado(&dado, &operacao, &resu));
+
+    }
+
+    for(vector<string>::iterator it = resultado.begin(); it != resultado.end(); it++) {
+        cout << *it << endl;
+    }
 
     return 0;
 }

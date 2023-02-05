@@ -34,21 +34,26 @@ void addConta() {
 }
 
 void listContas() {
-    // VARIAVEIS E OBJETOS DA FUNCAO
-    /*
+     // VARIAVEIS E OBJETOS DA FUNCAO
     string linha;
-    conta lista;
-    arquivo.open("bancoDados.pdf", ios::out);
+    conta lista;
+    arquivo.open("bancoDados.txt", ios::in);
 
-    if(arquivo.is_open()) {
-        cout << "   NOME         VALOR    DATA";
-        while(getline(arquivo, linha)) {
-            cout <<
-        }
-        arquivo.close();
-    }
-    */
-}
+    if(arquivo.is_open()) {
+         cout << "   NOME         VALOR    DATA\n";
+         while(getline(arquivo, linha)) {
+             // PEGANDO OS RESPECTIVOS VALORES DAS LINHAS
+             lista.nome = getNome(&linha);
+             lista.valor = getValor(&linha);
+
+             cout << " " << lista.nome << endl;
+         }
+         arquivo.close();
+     } else {
+         cout << "Nao foi possivel abrir o arquivo\n";
+     }
+     
+ }
 
 int menu() {
 
