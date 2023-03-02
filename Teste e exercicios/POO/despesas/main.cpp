@@ -2,19 +2,24 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <cstdlib>
 #include <sstream>
+#include <cstdlib>
 
 using namespace std;
+
+// definindo arquivo em modo fstream para abrirmos em modo leitura ou escrita
 fstream arquivo;
 
+// usamos esse struct de varias formas durante o codigo, pois ele sera a base, sendo para adicionar, pesquisar, etc.
 struct conta {
     string nome;
     string dia, mes;
     string data;
     string valor;
+    int id;
 };
 
+// funcao getNome para pegar o nome em uma linha que o usuario passar do arquivo
 string getNome(string *l) {
     string nome, linha = *l;
     for(int i = 0; i < linha.size(); i++) {
@@ -25,10 +30,11 @@ string getNome(string *l) {
     return nome;
 }
 
+// funcao getValor para pegar o valor em uma linha que o usuario passar do arquivo
 string getValor(string *l) {
     string linha = *l;
     string valor;
-    int cont = 0;
+    float cont = 0;
     for(int i = 0; i < linha.size(); i++) {
         if(linha[i] == ';')
             cont++;
@@ -40,6 +46,7 @@ string getValor(string *l) {
     return valor;
 }
 
+// funcao getValor para pegar a data em uma linha que o usuario passar do arquivo
 string getData(string *l) {
     string linha = *l;
     string valor;
@@ -57,6 +64,7 @@ string getData(string *l) {
     }
 }
 
+// colocando o 0 a esquerda (deixar bonito na saida)
 string formataData(string *d) {
     string novaD = *d;
     if(novaD.size() == 1) {
@@ -65,6 +73,7 @@ string formataData(string *d) {
     return novaD;
 }
 
+// usando essa funcao para dar um espacamento e deixar "responsivo" na saida do listContas
 int maiorNome() {
 
     string linha, nome;
@@ -103,6 +112,7 @@ int maiorNome() {
     return maior;
 }
 
+// usando essa funcao para dar um espacamento e deixar "responsivo" na saida do listContas
 int maiorvalor() {
     string linha, valor;
     vector<string> valores;
@@ -140,38 +150,116 @@ int maiorvalor() {
     return maior;
 }
 
-int ultmPosicao() {
-    char contLinha[] = {};
-    string linha, valor;
-    int cont=0, x=0, valorFinal;
+// remove conta trabalha com dados vindo do update, pois ele apaga um valor, e sobreescreve.
+/*
+   Porem ele tambem somente apaga um dado especifico, caso os parametros venham com valores nulos
+   ele entende que nao eh valores para serem atualizados e sim somente apagados
+*/
+void removeConta(string *atualizaValor, string *novosDados) {
+    conta salva;
+    string linha;
+    vector<string> linhas;
+    bool existe = false;
 
-    arquivo.open("bancoDados.txt", ios::in);
+        // usando a função remove conta para remover um valor e "atualizar". Entao caso esteja vindo um valor do parametro
+        // sabemos que estamos fazendo um update
+        if (*atualizaValor != "") {
+            arquivo.open("bancoDados.txt", ios::in);
 
-    if(arquivo.is_open()) {
-        while(getline(arquivo, linha)) {
-            for(int i = 0; i < linha.size(); i++) {
-                if(linha[i] == ';')
-                    break;
-                if(cont == 0) {
-                    contLinha[i] = linha[i];
-                    x++;
-                    //cout << contLinha[i] << " "<< x <<endl;
+            if(arquivo.is_open()) {
+
+                while(getline(arquivo, linha)) {
+
+                    if (getNome(&linha) != *atualizaValor) {
+
+                        salva.nome = getNome(&linha);
+                        salva.valor = getValor(&linha);
+                        salva.data = getData(&linha);
+                        linhas.push_back(salva.nome+";"+salva.data+";"+salva.valor+"\n");
+
+
+                    } else if (getNome(&linha) == *atualizaValor) {
+                        existe = true;
+                        linhas.push_back(*novosDados+"\n");
+
+                    }
+
+                }
+                // se nome existir no banco de dados, vamos salvar todos as linhas - exceto a que estiver o nome
+                arquivo.close();
+                if(existe) {
+                    arquivo.open("bancoDados.txt", ios::out);
+                    for(auto it = linhas.begin(); it != linhas.end(); it++) {
+                        arquivo << *it ;
+                    }
+                    cout << "\nconta '" << *atualizaValor << "' foi atualizada com SUCESSO!\n";
+                    arquivo.close();
+                } else {
+                    cout << "\nO nome passado nao foi encontrado" << endl;
+                }
+        } else {
+            cout << "\nArquivo nao pode ser aberto" << endl;
+        }
+    } else {
+        string nome;
+        cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
+        cout << "Qual conta deseja remover?\n";
+        cout << "Digite o nome da conta: ";
+        cin >> nome;
+        arquivo.open("bancoDados.txt", ios::in);
+        if(arquivo.is_open()) {
+            while(getline(arquivo, linha)) {
+                if(getNome(&linha) == nome) {
+                    existe = true;
+                } else {
+                    linhas.push_back(linha+"\n");
                 }
             }
+            arquivo.close();
         }
-        arquivo.close();
-    }
-
-    // verificando se é um número
-    for(int j = 0; j < x; j++) {
-        if(isdigit(contLinha[j])) {
-            valor += contLinha[j];
+        if(existe) {
+            arquivo.open("bancoDados.txt", ios::out);
+            if(arquivo.is_open()) {
+                for(auto it = linhas.begin(); it != linhas.end(); it++)
+                    arquivo << *it;
+                arquivo.close();
+                cout << "\nconta '" << nome << "' foi deletada com SUCESSO!\n";
+            } else {
+                cout << "Nao foi possivel abrir o arquivo\n";
+            }
+        } else {
+            cout << "\nNao foi possivel achar a conta que deseja remover\n";
         }
     }
-    istringstream(valor) >> valorFinal;
-    return valorFinal;
 }
 
+// updateConta usamos um nome para fazer a pesquisa e em seguida apagamos aquele dado, para sobreescrever um novo
+void updateConta() {
+    // arquivo.open("bancoDados.txt", ios::in);
+    conta pesquisar;
+    conta atualizar;
+    string novaLinha;
+
+    cout << "=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
+    cout << "Qual conta deseja atualizar (por nome): ";
+    cin >> pesquisar.nome;
+    cout << "Digite o novo nome da conta: ";
+    cin >> atualizar.nome;
+    cout << "Digite as novas datas: dia e o mes respectivamente: ";
+    cin >> atualizar.dia >> atualizar.mes;
+    cout << "Digite o valor da conta: ";
+    cin >> atualizar.valor;
+
+    // colocando o 0 a esquerda
+    atualizar.dia = formataData(&atualizar.dia);
+    atualizar.mes = formataData(&atualizar.mes);
+
+    novaLinha = atualizar.nome+";"+atualizar.dia+"/"+atualizar.mes+";"+atualizar.valor;
+
+    removeConta(&pesquisar.nome, &novaLinha);
+}
+
+// parte do codigo aonde adicionamos valores novos no arquivo
 void addConta() {
     // VARIAVEIS E OBJETOS DA FUNCAO
     conta adicionar;
@@ -191,20 +279,20 @@ void addConta() {
         adicionar.mes = formataData(&adicionar.mes);
 
         arquivo << adicionar.nome << ";" << adicionar.dia << "/" <<adicionar.mes << ";" << adicionar.valor << endl;
+
         cout << "Deseja continuar?[s/n] ";
         cin >> opc;
     }
-
+    cout << "\nnovas contas foram adicionadas com SUCESSO!\n";
     arquivo.close();
 }
 
+// parte do codigo aonde listamos os valores do arquivo
 void listContas() {
     // VARIAVEIS E OBJETOS DA FUNCAO
     int nomeSize = maiorNome();
     int contaSize = maiorvalor();
     // int valorSize = maiorValor();
-    cout << nomeSize << endl;
-    cout << contaSize << endl;
     string linha;
     conta lista;
     arquivo.open("bancoDados.txt", ios::in);
@@ -238,12 +326,18 @@ void listContas() {
 
 }
 
+// parte do codigo que será trabalhara com todas as outras funcoes
 int menu() {
 
     int opc = 0;
-
-    cout << "TOTAL: R$1304.50" << endl;
-    cout << "GASTO: R$240.00" << endl;
+    float val = 0;
+    string aux1 = "", aux2 = "", linha;
+    arquivo.open("bancoDados.txt", ios::in);
+    while(getline(arquivo, linha)) {
+        val += std::stof(getValor(&linha));
+    }
+    arquivo.close();
+    cout << "Valor gasto: R$ " << val << endl;
     cout << "========MENU=========" << endl;
     cout << "1 - LISTAR CONTAS" << endl;
     cout << "2 - ADICIONAR CONTA" << endl;
@@ -266,10 +360,10 @@ int menu() {
         addConta();
         return 2;
     case 3:
-        cout << "updateConta();" << endl;
+        updateConta();
         return 3;
     case 4:
-        cout << "removeConta();" << endl;
+        removeConta(&aux1, &aux2);
         return 4;
     case 5:
         cout << "Programa finalizado!" << endl;
@@ -286,6 +380,5 @@ int main()
         cout << "\n---------------------\n";
         sair = menu();
     }
-    cout << ultmPosicao() << endl;
     return 0;
 }
