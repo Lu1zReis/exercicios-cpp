@@ -1,0 +1,35 @@
+.formulario {
+	width: 20%;
+	text-align: center;
+	background-color: rgb(216, 45, 45);
+}
+.id {
+	margin-bottom: 3%;
+	padding: 5px;
+	width: 100%;
+	text-align: center;
+}
+.nome {
+	margin-bottom: 3%;
+	padding: 5px;
+	width: 100%;
+	text-align: center;
+}
+.data_nascimento {
+	margin-bottom: 3%;
+	padding: 5px;
+	width: 100%;
+	text-align: center;
+}
+.email {
+	margin-bottom: 3%;
+	padding: 5px;
+	width: 100%;
+	text-align: center;
+}
+.excluido {
+	margin-bottom: 3%;
+	padding: 5px;
+	width: 100%;
+	text-align: center;
+}

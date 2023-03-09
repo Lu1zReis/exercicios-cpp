@@ -1,0 +1,29 @@
+{
+  "atributos": [
+    {
+      "nome": "id",
+      "tipo": "integer",
+      "opcional": false
+    },
+    {
+      "nome": "nome",
+      "tipo": "string",
+      "opcional": false
+    },
+    {
+      "nome": "data_nascimento",
+      "tipo": "date",
+      "opcional": true
+    },
+    {
+      "nome": "email",
+      "tipo": "string",
+      "opcional": false
+    },
+    {
+      "nome": "excluido",
+      "tipo": "boolean",
+      "opcional": false
+    }
+  ]
+}
