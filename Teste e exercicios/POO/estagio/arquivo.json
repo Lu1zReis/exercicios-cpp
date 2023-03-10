@@ -1,0 +1,14 @@
+{
+  "atributos": [
+    {
+      "nome": "codigo",
+      "tipo": "integer",
+      "opcional": false
+    },
+    {
+      "nome": "nome",
+      "tipo": "string",
+      "opcional": true
+    }
+  ]
+}

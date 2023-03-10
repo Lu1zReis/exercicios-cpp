@@ -1,10 +1,13 @@
 #include <iostream>
 #include <fstream>
+
 using namespace std;
 
+// arquivos que iremos trabalhar
 fstream arquivoJSON;
 fstream arquivoHTML;
 fstream arquivoCSS;
+fstream arquivoSQL;
 
 // funcao para pegar os campos dos atributos
 string getAtributo(string *l) {
@@ -56,7 +59,7 @@ string getValor(string *l) {
 }
 
 // convertendo para um tipo que o HTML aceite
-string getTipo(string *v) {
+string getTipoHTML(string *v) {
     string valor = *v;
     if(valor == "string")
             return "text";
@@ -69,31 +72,126 @@ string getTipo(string *v) {
 
 }
 
+char getVirgula(string *l) {
+    string linha = *l;
+    int cont = 0;
+    for(int i = 0; i < linha.size(); i++) {
+        if(linha[i] == '}') {
+            cont++;
+        } else {
+            if(linha[i] == ',') {
+                cont++;
+            }
+        }
+    }
+    if(cont == 2) {
+        return ',';
+    } else {
+        return ' ';
+    }
+}
+
+string getTipoSQL(string *v) {
+    string valor = *v;
+
+    if(valor == "string")
+            return "VARCHAR(50)";
+    if(valor == "decimal")
+            return "DECIMAL(10,2)";
+    if(valor == "integer")
+            return "INT";
+
+    return valor;
+}
+
+void createSQL(string *nomeArquivo) {
+    string linha, atributo, valor, resu = "";
+    // abrindo o json
+    arquivoJSON.open(*nomeArquivo, ios::in);
+
+    if(arquivoJSON.is_open()) {
+        // criando um sql
+        arquivoSQL.open("dados.sql", ios::out);
+
+        arquivoSQL << "CREATE DATABASE dados;" << endl;
+        arquivoSQL << "USE dados;" << endl;
+        arquivoSQL << "CREATE TABLE atributos( \n";
+
+        while (getline(arquivoJSON, linha)) {
+
+            atributo = getAtributo(&linha);
+            valor = getValor(&linha);
+            valor = getTipoSQL(&valor);
+
+            if(atributo == "nome") {
+                resu += valor + " ";
+            }
+            if(atributo == "tipo") {
+                resu += valor;
+            }
+            if(getVirgula(&linha) == ',') {
+                resu += ",\n";
+            } else {
+                if(getVirgula(&linha) == ' ') {
+                    resu += "";
+                }
+            }
+            arquivoSQL << resu;
+            resu = "";
+        }
+        arquivoSQL << "\n);" << endl;
+
+    } else {
+        cout << "arquivo nao encontrado ou nao existe/nao foi possivel criar o arquivo SQL" << endl;
+    }
+
+    arquivoSQL.close();
+    arquivoJSON.close();
+
+}
+
+// estilizando o formulario
 void createCSS(string *nomeArquivo) {
 
     // variaveis
     string linha, valor, atributo, resultado;
 
-    arquivoCSS.open("style.css", ios::out);
 
     // abrindo o arquivo json
     arquivoJSON.open(*nomeArquivo, ios::in);
 
 
     if(arquivoJSON.is_open()) {
+
+        arquivoCSS.open("style.css", ios::out);
+
+        arquivoCSS << ".formulario {\n";
+        arquivoCSS << "     width: 16%;\n";
+        arquivoCSS << "     text-align: center;\n";
+        arquivoCSS << "     background-color: blue;\n";
+        arquivoCSS << "     color: white;\n";
+        arquivoCSS << "}\n";
+
         while(getline(arquivoJSON, linha)) {
 
             atributo = getAtributo(&linha);
             valor = getValor(&linha);
 
-            if(atributo == "nome")
+            if(atributo == "nome") {
                 resultado = "." + valor + "{\n";
+                arquivoCSS << resultado;
+                arquivoCSS << "     margin-bottom: 3%;\n";
+                arquivoCSS << "     padding: 5px;\n";
+                arquivoCSS << "     width: 100%;\n";
+                arquivoCSS << "     text-align: center;\n";
+                arquivoCSS << "}\n";
+            }
 
-           // arquivoCSS <<
+
         }
 
     } else {
-        cout << "arquivo nao encontrado ou nao existe" << endl;
+        cout << "arquivo nao encontrado ou nao existe/nao foi possivel criar o arquivo CSS" << endl;
     }
 
     arquivoJSON.close();
@@ -110,32 +208,38 @@ void createHTML(string *nomeArquivo) {
     // resultado ira armazenar os <input> do HTML para depois passarmos para o arquivo index.html
     string linha, atributo, valor, resultado, opc, nomeArq;
 
-    arquivoHTML.open("index.html", ios::out);
+    nomeArq = *nomeArquivo;
 
-    arquivoHTML << "<html lang='pt-br'>" << endl;
-    arquivoHTML << "    <head>" << endl;
-    arquivoHTML << "        <meta charset='UTF-8'/>" << endl;
-    arquivoHTML << "        <title>Teste Prático</title>" << endl;
-    arquivoHTML << "         <link rel='stylesheet' type='text/css' href='styles.css'>" << endl;
-    arquivoHTML << "    <head>" << endl;
-    arquivoHTML << "    <body>" << endl;
-    arquivoHTML << "        <form class='formulario'>" << endl;
     // abrindo o arquivo json
-    arquivoJSON.open(*nomeArquivo, ios::in);
+    arquivoJSON.open(nomeArq, ios::in);
 
 
         if(arquivoJSON.is_open()) {
+
+
+            arquivoHTML.open("index.html", ios::out);
+
+            arquivoHTML << "<html lang='pt-br'>" << endl;
+            arquivoHTML << "    <head>" << endl;
+            arquivoHTML << "        <meta charset='UTF-8'/>" << endl;
+            arquivoHTML << "        <title>Teste Prático</title>" << endl;
+            arquivoHTML << "         <link rel='stylesheet' type='text/css' href='style.css'>" << endl;
+            arquivoHTML << "    <head>" << endl;
+            arquivoHTML << "    <body>" << endl;
+            arquivoHTML << "        Os campos marcados com * são obrigatórios<hr>" << endl;
+            arquivoHTML << "        <form class='formulario'>" << endl;
+
                 while(getline(arquivoJSON, linha)) {
                         atributo = getAtributo(&linha);
 
                         // getTipo pega o valor do getValor e converte ele para um tipo aceitavel em html, ex: string -> text
                         valor = getValor(&linha);
-                        valor = getTipo(&valor);
+                        valor = getTipoHTML(&valor);
 
                         if(atributo == "nome")
                                 resultado = "           " + valor + ": " + "<input name='" + valor + "' class='" + valor + "'";
                         if(atributo == "tipo")
-                                resultado += "type='" + valor + "'><br>\n";
+                                resultado += " type='" + valor + "'><br>\n";
 
                         // passando o * para mostrar campos obrigatórios
                         if(atributo == "opcional"){
@@ -150,26 +254,20 @@ void createHTML(string *nomeArquivo) {
                         opc = "";
                 }
 
+                arquivoHTML << "           <button>Enviar</button>" << endl;
+                arquivoHTML << "        </form>" << endl;
+                arquivoHTML << "    </body>" << endl;
+                arquivoHTML << "</html>" << endl;
+                arquivoHTML.close();
+
         } else {
-                cout << "arquivo nao encontrado ou nao existe" << endl;
+                cout << "arquivo nao encontrado ou nao existe/nao foi possivel criar o arquivo HTML" << endl;
         }
 
         arquivoJSON.close();
 
-    arquivoHTML << "           <button>Enviar</button>" << endl;
-    arquivoHTML << "        </form>" << endl;
-    arquivoHTML << "    </body>" << endl;
-    arquivoHTML << "</html>" << endl;
-    arquivoHTML.close();
-
-    nomeArq = *nomeArquivo;
     createCSS(&nomeArq);
-}
-
-// lendo o json
-void readJSON() {
-
-
+    createSQL(&nomeArq);
 }
 
 int main() {
