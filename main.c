@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+// .. .. .. .. ..
 typedef struct numComplx {
     double real;
     double img;
