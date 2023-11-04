@@ -1,0 +1,27 @@
+#include "racionais.h"
+
+Tq neg (Tq q) {
+	if (q.den < 0)
+		q.den = -q.den;
+	else 
+		q.num = -q.num;
+	return q;
+}
+
+Tq sum (Tq v1, Tq v2) {
+	Tq n;
+	n.num = v1.num * v2.den + v1.den * v2.num;
+	n.den = v1.den * v2.den;
+	return n;
+}
+Tq sub (Tq v1, Tq v2) {
+	return sum(v1, neg(v2));
+}
+Tq mut (Tq v1, Tq v2) {
+	Tq n;
+	n.num = v1.num * v2.num;
+	n.den = v1.den * v2.den;
+}
+Tq div (Tq v1, Tq v2) {
+	
+}
