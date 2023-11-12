@@ -11,15 +11,16 @@ typedef struct _list_ {
 
 Tlist *makeList ();
 Tlist *newItem (int n);
-int insertBegintList (Tlist **l, int item);
-int insertPos (Tlist **l, int v, int p);
-int eraseList(Tlist **l);
-int searchItem (Tlist *l, int item);
-int removeItem (Tlist **l, int item);
-int removeItemBegin (Tlist **l);
+int insertBegintList (Tlist **l, int item); //
+int insertPos (Tlist **l, int v, int p); //
+int eraseList(Tlist **l); //
+int searchItem (Tlist *l, int item); //
+int removeItem (Tlist **l, int item); //
+int removeItemBegin (Tlist **l); //
 int isEmpty (Tlist *l);
-int listSize (Tlist *l);
-void showList (Tlist *l);
-void ordena (Tlist **l);
+int listSize (Tlist *l); //
+void showList (Tlist *l); //
+int ordena (Tlist **l); //
+void freeList(Tlist **l);
 
 #endif // _LISTA_H_

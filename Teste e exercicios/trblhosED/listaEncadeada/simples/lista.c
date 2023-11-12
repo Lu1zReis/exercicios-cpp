@@ -87,8 +87,8 @@ int removeItemBegin (Tlist **l) {
 int removeItem (Tlist **l, int item) {
     int pos = searchItem(*l, item);
     Tlist *aux = *l, *rm = *l;
-    if (pos < 0) return -1;
-    else if (pos == 0)
+    if (pos < 1) return -1;
+    else if (pos == 1)
             return removeItemBegin(l);
     else {
         while (rm->value != item) {
@@ -123,8 +123,8 @@ void showList (Tlist *l) {
 }
 
 int ordena (Tlist **l) {
-    Tlist *aux, *aux2, *lOrdem, *ant;
-    if (l == NULL || (*l)->next == NULL) return 0;
+    Tlist *aux, *aux2, *lOrdem, *ant, *novo;
+    if (*l == NULL || (*l)->next == NULL) return 0;
     else {
         lOrdem = NULL;
         aux = *l;
@@ -132,26 +132,45 @@ int ordena (Tlist **l) {
             if (lOrdem == NULL) {
                 lOrdem = aux;
                 aux = aux->next;
-                lOrdem->prox = NULL;
+                lOrdem->next = NULL;
             } else {
                 aux2 = lOrdem; ant = lOrdem;
-                if (aux2->value > aux->value) {
-                    aux->next = lOrdem;
-                    lOrdem = aux;
+                if (aux2->value >= aux->value) {
+                    novo = aux;
+                    aux = aux->next;
+                    novo->next = lOrdem;
+                    lOrdem = novo;
                 } else {
-                    while (aux2 != NULL && aux2->value < aux->value) {
-                        ant = aux2;
+                    while (aux2 != NULL && aux2->value <= aux->value) {
+                        ant  = aux2;
                         aux2 = aux2->next;
                     }
-                    if (ant->value < aux->value) {
-                        ant->prox = aux;
+                    if (aux2 == NULL) {
+                        ant->next = aux;
+                        aux = aux->next;
+                        ant->next->next = NULL;
                     } else {
-                        aux->next = aux2;
+                        novo = aux;
+                        aux  = aux->next;
+                        novo->next = aux2;
                         ant->next = aux;
                     }
                 }
             }
-            if (lOrdem->next != NULL) aux = aux->next;
+            // if (lOrdem->next != NULL || aux2 == NULL) aux = aux->next;
+        }
+        *l = lOrdem;
+        return 1;
+    }
+}
+
+void freeList(Tlist **p) {
+    Tlist *rm;
+    if (p != NULL) {
+        while (*p != NULL) {
+            rm = *p;
+            *p = (*p)->next;
+            free(rm);
         }
     }
 }
