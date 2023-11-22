@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct _pilha_ {
+	char info;
+        struct _pilha_ *prox;
+};
+
+typedef struct _pilha_ Pilha;
+
+void *inserePilha (Pilha **no, char info) {
+	Pilha *novo;
+	novo = (Pilha*) malloc (sizeof(Pilha));
+	novo->info = info;
+	novo->prox = *no;
+	*no = novo;
+}
+
+void removePilha (Pilha **no) {
+	Pilha *aux;
+	aux = *no;
+	*no = (*no)->prox;
+	free(aux);
+}
+
+void escrevePilha (Pilha *no) {
+	if (no != NULL) printf("%c\n", no->info);
+}
+
+void desalocaPilha (Pilha **no) {
+	Pilha *aux;
+	while (*no != NULL) {
+		aux = *no;
+		*no = (*no)->prox;
+		free(aux);
+	}
+	*no = NULL;
+}
+
+int main () {
+	Pilha *no = NULL;
+	char s[10] = {}; int n, i, j, c; 
+	scanf("%d", &n);
+	for (i = 0; i < n; i++) {
+		scanf("%s", s);
+		printf("%s\n", s);
+		j = 0; c = 0;
+		while (s[j] != '\0') {
+			printf("%c\n", s[j]);
+			if (s[j] == '<') inserePilha(&no, '<');
+		       	else if (s[j] == '>' && no != NULL) {
+				removePilha(&no);
+				c++;
+			}	
+			j++;
+		}
+		desalocaPilha(&no);
+		printf("diamantes retirados: %d\n", c);
+	}
+
+	return 0;
+}
