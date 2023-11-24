@@ -139,6 +139,7 @@ void removeFilaPrioridadeMaior (PNO **p, Lista **l) {
             if (aux->prox == NULL) {
                 aux->ant->prox = NULL;
                 free(*p);
+                *p = aux;
             } else {
                 if (aux->ant == NULL) {
                     *p = (*p)->prox;
