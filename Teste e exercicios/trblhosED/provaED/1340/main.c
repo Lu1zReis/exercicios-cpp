@@ -37,7 +37,7 @@ int procuraMaior (Lista *l) {
     }
     return maior;
 }
-
+//aux
 void adiciona (Lista **l, int info) {
     PNO *novo;
     novo = (PNO*) malloc(sizeof(PNO));
