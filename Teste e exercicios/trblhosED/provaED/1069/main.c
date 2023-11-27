@@ -40,7 +40,7 @@ void imprime (Pilha *no) {
 
 int main() {
     Pilha *no = NULL;
-    char s[100]; // Aumentei o tamanho da matriz
+    char s[1001]; // Aumentei o tamanho da matriz
     int n, i, j, c;
 
     scanf("%d", &n);
@@ -51,7 +51,7 @@ int main() {
         j = 0;
         c = 0;
 
-        while (s[j] != '\0' && s[j] != '\n') {
+        while (s[j] != '\0') {
             if (s[j] == '<')
                 inserePilha(&no, '<');
             else if (s[j] == '>' && no != NULL) {
