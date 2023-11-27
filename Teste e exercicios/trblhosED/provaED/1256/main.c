@@ -24,7 +24,11 @@ void criaTamLista(Lista **l, int tam) {
         novo->prox = NULL;
 
         if (i == 0) {
+<<<<<<< HEAD
             *l = novo; // Guarda o início da lista
+=======
+            *l = novo; // Guarda o inÃ­cio da lista
+>>>>>>> 645ffa220898e1ce807cb977662f9b970750f216
             inicio = novo;
         } else {
             atual->prox = novo;
@@ -64,6 +68,7 @@ void insereLista(Lista **vet, int v, int m, int c) {
     }
 }
 
+<<<<<<< HEAD
 void percorre (Lista *vet, int i) {
     printf("%d -> ", i);
     if (vet != NULL) {
@@ -78,6 +83,26 @@ void percorre (Lista *vet, int i) {
         printf("\\");
         printf("\n");
     }
+=======
+void percorre (Lista *lista) {
+    Lista *vet = lista; Pno *l;
+    int i=0;
+    printf("%d -> ", i);
+    while (vet != NULL) {
+        l = vet->lista;
+        while (l != NULL) {
+            printf("%d -> ", l->info);
+            l = l->prox;
+        }
+        printf("\\");
+        printf("\n");
+        vet = vet->prox;
+        i++;
+        printf("%d -> ", i);
+    }
+    printf("\\");
+    printf("\n");
+>>>>>>> 645ffa220898e1ce807cb977662f9b970750f216
 }
 
 void removeLista (Lista **vet) {
@@ -111,7 +136,11 @@ int main()
             scanf("%d", &v[j]);
             insereLista(&vet, v[j], m, c);
         }
+<<<<<<< HEAD
         percorre(vet,0);
+=======
+        percorre(vet);
+>>>>>>> 645ffa220898e1ce807cb977662f9b970750f216
         removeLista(&vet);
     }
 
