@@ -30,7 +30,8 @@ void makeAutomato(Tno **no, int state, char alpha, int destiny, int max, State *
         	}
 	}
 	(*no)->c[destiny-1] = alpha;
-        (*no)->next[destiny-1] = Space->space[destiny-1]; // fazendo o estado atual apontar para o endereço de um estado que tem transição
+	// fazendo o estado atual apontar para o endereço de um estado que tem transição
+    (*no)->next[destiny-1] = Space->space[destiny-1]; 
     	
 }
 
