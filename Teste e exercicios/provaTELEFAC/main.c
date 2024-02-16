@@ -18,26 +18,27 @@ typedef struct _no_ State;
 
 void makeAutomato(Tno **no, int state, char alpha, int destiny, int max, State *Space) {
     	int i = -1;
-    	if (*no == NULL) {
-        	*no = (Tno *) malloc(sizeof(Tno));
+	// caso tenhamos um estado que ainda está nulo
+	if (*no == NULL) {
+        	*no = (Tno *) malloc(sizeof(Tno)); // alocando um estado 
 		(*no)->state = state;
-       		(*no)->next = (Tno **) malloc(max * sizeof(Tno));
+       		(*no)->next = (Tno **) malloc(max * sizeof(Tno)); // alocando n próximos estados
         	(*no)->c = (char *) malloc(max * sizeof(char));
         	while (++i < max) {
             		(*no)->c[i] = ' ';
             		(*no)->next[i] = NULL;
         	}
-        	(*no)->c[destiny-1] = alpha;
-        	(*no)->next[destiny-1] = Space->space[destiny-1];
-    	} else {
-        	(*no)->c[destiny-1] = alpha;
-        	(*no)->next[destiny-1] = Space->space[destiny-1];
-    	}
+	}
+	(*no)->c[destiny-1] = alpha;
+        (*no)->next[destiny-1] = Space->space[destiny-1]; // fazendo o estado atual apontar para o endereço de um estado que tem transição
+    	
 }
 
 int checkAlphabet(char *s, State *Space, int count, int i, int *fS, int maxStates) {
 	int aux = 0, j;
-	while (aux < maxStates && Space->space[i]->c[aux] != s[count]) aux++;
+
+	while (aux < maxStates && Space->space[i]->c[aux] != s[count]) aux++; // 
+	
 	if (Space->space[i]->c[aux] == s[count]) {
 		if (strlen(s)-1 == count) {
 			for (j = 0; j < sizeof(fS)/sizeof(int); j++)
@@ -102,7 +103,8 @@ int main() {
 	scanf("%s", set); 	
 	
 	if (verifyChain(set, s)) {
-		// mostrando os valores
+	
+	 	// mostrando os valores
     		for (i = 0; i < maxState; i++) {
         		if (automato->space[i] != NULL) 
 				printf("%d -> ", automato->space[i]->state);
