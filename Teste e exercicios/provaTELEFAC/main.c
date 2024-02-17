@@ -37,12 +37,13 @@ void makeAutomato(Tno **no, int state, char alpha, int destiny, int max, State *
 
 int checkAlphabet(char *s, State *Space, int count, int i, int *fS, int maxStates) {
 	int aux = 0, j;
-
-	while (aux < maxStates && Space->space[i]->c[aux] != s[count]) aux++; // 
-	
+	// aux irá procurar a posição que está contida a letra na palavra s para a transição 
+	while (aux < maxStates && Space->space[i]->c[aux] != s[count]) aux++; 
+	// verifica se achou
 	if (Space->space[i]->c[aux] == s[count]) {
-		if (strlen(s)-1 == count) {
-			for (j = 0; j < sizeof(fS)/sizeof(int); j++)
+		if (strlen(s)-1 == count) { // verifica se é o fim
+			// looping para descobrir se aux agora pertence a um dos estados finais
+			for (j = 0; j < sizeof(fS)/sizeof(int); j++) 
 				if (aux == fS[j]-1) return 1;
 			return 0;
 		}
