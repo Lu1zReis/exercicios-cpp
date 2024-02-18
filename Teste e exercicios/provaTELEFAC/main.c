@@ -67,23 +67,23 @@ int main() {
     	int dest, state, maxState, *fState, iniState, i, j, n;
     	char alphabet, set[MAXSET], *s;
 
-	printf("Digite a quantidade de estados: ");
+	// quantidade de estados
     	scanf("%d", &maxState);
 	
-	printf("Digite o estado inicial: ");
+	// estado inicial
 	scanf("%d", &iniState);
 	
-	printf("Digite o número de estados finais: ");
+	// Digite o número de estados finais
 	scanf("%d", &j);
 	fState = (int*) malloc(sizeof(int) * j);
 	for (i = 0; i < j; i++) scanf("%d", &fState[i]); 
 	
-	printf("Digite o número de simbolos do alfabeto: ");
+	// número de simbolos do alfabeto
 	scanf("%d", &j);
 	s = (char*) malloc (sizeof(char) * j);
 	for (i = 0; i < j; i++) scanf(" %c", &s[i]);
 
-	printf("Digite a quantidade de transicao: ");
+	// quantidade de transicao
     	scanf("%d", &n);
 
     	State *automato = (State *)malloc(sizeof(State));
@@ -93,7 +93,7 @@ int main() {
 
     	i = -1;
     	while (++i < n) {
-        	printf("Digite estado->alfabeto->destino: ");
+        	// estado->alfabeto->destino
         	scanf("%d %c %d", &state, &alphabet, &dest);
         	makeAutomato(&(automato)->space[state-1], state, alphabet, dest, maxState, automato); 
     	}
@@ -101,27 +101,14 @@ int main() {
 	if (automato->space[dest-1] == NULL) 
 		makeAutomato(&(automato)->space[dest-1], dest, ' ', dest, maxState, automato); 
  	
-	printf("Digite a cadeia de entrada: ");
+	// cadeia de entrada
 	scanf("%s", set); 	
 	
 	if (verifyChain(set, s)) {
-	
 	 	// mostrando os valores
-    		for (i = 0; i < maxState; i++) {
-        		if (automato->space[i] != NULL) 
-				printf("%d -> ", automato->space[i]->state);
-			int j = -1;
-        		while (++j < maxState) {
-            		if (automato->space[i]->c[j] != ' ')
-                		printf("%c -> ", automato->space[i]->c[j]);
-            		if (automato->space[i]->next[j] != NULL)
-                		printf("%d\n", automato->space[i]->next[j]->state);
-			}
-    		}
-		printf("saida: %d\n", checkAlphabet(set, automato, 0, 0, fState, maxState));
-	} else { 
-		printf("saida: 0");	
-	}
+		if(checkAlphabet(set, automato, 0, 0, fState, maxState)) printf("aceita!\n");
+		else printf("rejeitado!\n")
+	} else 	printf("rejeitado!\n");	
 
     	return 0;
 }
